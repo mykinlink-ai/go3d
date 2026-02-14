@@ -1,55 +1,129 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
   <meta charset="UTF-8">
   <title>kinlink family crest builder</title>
   <link href="https://fonts.googleapis.com/css2?family=Comfortaa:wght@400;600&display=swap" rel="stylesheet">
   <style>
+    * {
+      box-sizing: border-box;
+    }
+
     body {
+      margin: 0;
+      min-height: 100vh;
       font-family: 'Comfortaa', sans-serif;
-      padding: 20px;
+      color: #f5f5f5;
+      background: #000;
       display: flex;
       justify-content: center;
-      gap: 40px;
       align-items: flex-start;
+      padding: 40px 20px;
+      position: relative;
+      overflow-x: hidden;
     }
 
-    h1, h2, h3 { font-family: 'Comfortaa', sans-serif; }
-    h1 { text-transform: lowercase; }
-
-    /* Left column */
-    #heraldryInfo {
-      width: 340px;
-      line-height: 1.5;
-      font-size: 14px;
+    /* Top-draped photorealistic-ish velvet curtains using layered gradients */
+    body::before,
+    body::after {
+      content: "";
+      position: fixed;
+      top: 0;
+      width: 40%;
+      height: 40vh;
+      background:
+        radial-gradient(circle at 20% 0%, rgba(255,255,255,0.25), transparent 55%),
+        radial-gradient(circle at 80% 0%, rgba(0,0,0,0.7), transparent 60%),
+        linear-gradient(135deg, #1b002f, #4b0082, #1b002f);
+      filter: saturate(1.4) contrast(1.2);
+      z-index: -2;
+      pointer-events: none;
     }
 
-    #heraldryInfo h2 {
-      font-size: 20px;
-      margin-bottom: 10px;
+    body::before {
+      left: -5%;
+      border-bottom-right-radius: 60% 80%;
     }
 
-    #heraldryInfo h3 {
-      font-size: 16px;
-      margin-top: 14px;
-      margin-bottom: 6px;
+    body::after {
+      right: -5%;
+      border-bottom-left-radius: 60% 80%;
+      transform: scaleX(-1);
     }
 
-    #heraldryInfo ul {
-      padding-left: 18px;
-      margin-top: 4px;
-      margin-bottom: 8px;
+    /* Floating shield silhouette behind content */
+    #shield-bg {
+      position: fixed;
+      top: 50%;
+      left: 50%;
+      width: 420px;
+      height: 520px;
+      transform: translate(-50%, -50%);
+      border-radius: 50% 50% 45% 45% / 30% 30% 70% 70%;
+      background: radial-gradient(circle at 30% 0%, rgba(255,255,255,0.12), transparent 55%),
+                  radial-gradient(circle at 70% 0%, rgba(0,0,0,0.7), transparent 60%),
+                  linear-gradient(180deg, rgba(255,255,255,0.08), rgba(0,0,0,0.9));
+      opacity: 0.18;
+      box-shadow: 0 0 40px rgba(0,0,0,0.9);
+      z-index: -1;
     }
 
-    /* Right column */
-    #generator {
-      width: 380px;
+    #app {
+      width: 100%;
+      max-width: 960px;
+      position: relative;
+      z-index: 1;
+    }
+
+    #logo {
       text-align: center;
+      margin-bottom: 20px;
     }
 
-    .field-group {
-      text-align: left;
-      margin-bottom: 10px;
+    #logo span {
+      font-family: 'Comfortaa', sans-serif;
+      font-size: 32px;
+      color: #ffffff;
+      text-transform: lowercase;
+      letter-spacing: 0.08em;
+    }
+
+    #panel {
+      background: rgba(10, 10, 10, 0.82);
+      border-radius: 18px;
+      border: 1px solid rgba(255,255,255,0.12);
+      box-shadow: 0 18px 40px rgba(0,0,0,0.85);
+      padding: 24px 26px 26px;
+      display: grid;
+      grid-template-columns: minmax(0, 1.2fr) minmax(0, 1fr);
+      gap: 26px;
+    }
+
+    @media (max-width: 900px) {
+      #panel {
+        grid-template-columns: 1fr;
+      }
+    }
+
+    h2 {
+      margin: 0 0 10px;
+      font-size: 18px;
+      font-weight: 600;
+    }
+
+    .section-title {
+      font-weight: 600;
+      font-size: 14px;
+      margin: 16px 0 6px;
+      text-transform: uppercase;
+      letter-spacing: 0.06em;
+      color: #f0e6ff;
+    }
+
+    .hint {
+      font-size: 11px;
+      color: #c2b7e6;
+      margin-top: 2px;
     }
 
     label {
@@ -58,249 +132,544 @@
       margin-bottom: 2px;
     }
 
-    input, textarea, button {
+    input, select, textarea, button {
       font-family: 'Comfortaa', sans-serif;
-      padding: 6px 8px;
-      margin: 2px 0;
-      width: 100%;
       font-size: 13px;
+      width: 100%;
+      padding: 7px 9px;
+      border-radius: 8px;
+      border: 1px solid rgba(255,255,255,0.18);
+      background: rgba(15,15,20,0.9);
+      color: #f5f5f5;
+      outline: none;
+    }
+
+    input::placeholder,
+    textarea::placeholder {
+      color: #8f86b5;
     }
 
     textarea {
       resize: vertical;
-      min-height: 40px;
+      min-height: 60px;
+    }
+
+    select {
+      cursor: pointer;
     }
 
     button {
-      background: #4b0082;
-      color: white;
+      background: linear-gradient(135deg, #4b0082, #8b3dff);
       border: none;
       cursor: pointer;
       width: auto;
-      padding: 8px 16px;
+      padding: 8px 18px;
       margin-top: 10px;
+      font-weight: 600;
+      text-transform: lowercase;
+      letter-spacing: 0.04em;
     }
 
-    .hint {
-      font-size: 11px;
-      color: #555;
-      margin-top: 1px;
+    button.secondary {
+      background: transparent;
+      border: 1px solid rgba(255,255,255,0.35);
+      margin-left: 8px;
+    }
+
+    button:disabled {
+      opacity: 0.5;
+      cursor: default;
+    }
+
+    #left, #right {
+      min-width: 0;
     }
 
     #result img {
-      margin-top: 20px;
-      max-width: 320px;
+      margin-top: 14px;
+      max-width: 100%;
+      border-radius: 12px;
+      box-shadow: 0 12px 30px rgba(0,0,0,0.9);
     }
 
     #status {
-      font-size: 13px;
-      margin-top: 10px;
+      font-size: 12px;
+      margin-top: 8px;
+      color: #d7cfff;
     }
 
-    @media (max-width: 900px) {
-      body {
-        flex-direction: column;
-        align-items: center;
-      }
-      #heraldryInfo, #generator {
-        width: 100%;
-        max-width: 420px;
-      }
+    .pill-row {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 6px;
+      margin-top: 4px;
+    }
+
+    .pill {
+      font-size: 11px;
+      padding: 4px 8px;
+      border-radius: 999px;
+      border: 1px solid rgba(255,255,255,0.25);
+      cursor: pointer;
+      background: rgba(20,20,30,0.9);
+    }
+
+    .pill span.swatch {
+      display: inline-block;
+      width: 10px;
+      height: 10px;
+      border-radius: 50%;
+      margin-right: 4px;
+      vertical-align: middle;
+    }
+
+    .small-row {
+      display: flex;
+      gap: 8px;
+      margin-top: 4px;
+    }
+
+    .small-row > div {
+      flex: 1;
+    }
+
+    .subtext {
+      font-size: 11px;
+      color: #b9b0dd;
+      margin-top: 4px;
     }
   </style>
 </head>
 <body>
+<div id="shield-bg"></div>
 
-<!-- LEFT: HERALDRY EXPLANATION -->
-<div id="heraldryInfo">
-  <h2>How a Family Crest Is Traditionally Built</h2>
-
-  <p>Family crests (coats of arms) come from heraldry, a system developed in medieval Europe to identify families, individuals, and institutions. Each part of the design has a purpose and meaning.</p>
-
-  <h3>Family / House Name</h3>
-  <p>The family or house name identifies who the crest belongs to. It often appears above or near the crest.</p>
-
-  <h3>The Crest (Above the Shield)</h3>
-  <p>The crest sits above the shield, often on a helmet or crown. It might be an animal, object, or symbol that represents honor, rank, or identity.</p>
-
-  <h3>The Shield and Its Quarters</h3>
-  <p>The shield is the heart of the coat of arms. It can be divided into sections (quarters), each representing something important:</p>
-  <ul>
-    <li><strong>Top Left (Dexter Chief):</strong> Position of greatest honor; main trait, lineage, or defining symbol.</li>
-    <li><strong>Top Right (Sinister Chief):</strong> Alliances, partnerships, or secondary strengths.</li>
-    <li><strong>Bottom Left (Dexter Base):</strong> Personal virtues, profession, or inherited symbols.</li>
-    <li><strong>Bottom Right (Sinister Base):</strong> Aspirations, future goals, or legacy.</li>
-  </ul>
-
-  <h3>Symbols (Charges)</h3>
-  <p>Symbols on the shield are called charges. They are chosen for meaning:</p>
-  <ul>
-    <li><strong>Animals:</strong> courage, leadership, nobility</li>
-    <li><strong>Plants:</strong> growth, peace, renewal</li>
-    <li><strong>Tools:</strong> knowledge, justice, craftsmanship</li>
-    <li><strong>Stars / Sun / Moon:</strong> guidance, hope, divine favor</li>
-    <li><strong>Mythical creatures:</strong> transformation, protection, strength</li>
-  </ul>
-
-  <h3>Supporters, Mantling, and Compartment</h3>
-  <p><strong>Supporters</strong> are figures (often animals) standing on each side of the shield. <strong>Mantling</strong> is the decorative cloth flowing from the helmet. The <strong>compartment</strong> is the base they stand on (rock, scroll, ground, etc.). These elements add story, status, and style.</p>
-
-  <h3>Motto</h3>
-  <p>The motto expresses the guiding principle or philosophy of the family. It often appears on a scroll beneath the shield.</p>
-
-  <h3>Colors (Tinctures)</h3>
-  <p>Traditional heraldic colors (tinctures) include gold, silver, red, blue, green, black, and purple. Each color carries symbolic meaning, such as courage, loyalty, hope, or wisdom.</p>
-</div>
-
-<!-- RIGHT: FULL FAMILY CREST GENERATOR -->
-<div id="generator">
-  <h1>kinlink family crest builder</h1>
-
-  <div class="field-group">
-    <label for="familyName">Family / House Name</label>
-    <input id="familyName" placeholder="e.g., The Carter Family, House of Ramirez">
-    <div class="hint">This is the name the crest represents.</div>
+<div id="app">
+  <div id="logo">
+    <span>kinlink</span>
   </div>
 
-  <div class="field-group">
-    <label for="crestType">Crest (above the shield)</label>
-    <input id="crestType" placeholder="e.g., crowned lion, phoenix, knight’s helmet">
-    <div class="hint">Symbol that sits above the shield, often on a crown or helmet.</div>
+  <div id="panel">
+    <!-- LEFT: INPUTS -->
+    <div id="left">
+      <h2>family crest builder</h2>
+
+      <div class="section-title">Family identity</div>
+      <label for="familyName"><b>Family / House Name</b></label>
+      <input id="familyName" placeholder="e.g., The Carter Family, House of Ramirez">
+
+      <label for="identityWords"><b>Three words that describe your family</b></label>
+      <input id="identityWords" placeholder="e.g., brave, loyal, creative">
+
+      <label for="themes"><b>Images or themes that come to mind</b></label>
+      <input id="themes" placeholder="e.g., mountains, stars, books, fire">
+
+      <label for="colorWords"><b>What colors do you picture when you think of your family?</b></label>
+      <input id="colorWords" placeholder="e.g., blue, gold, black" oninput="suggestPalettes()">
+      <div class="hint">We’ll suggest heraldic color palettes based on your words.</div>
+
+      <label for="paletteSelect" style="margin-top:8px;"><b>Suggested color palette</b></label>
+      <select id="paletteSelect">
+        <option value="">(choose a palette)</option>
+      </select>
+      <div class="pill-row" id="palettePills"></div>
+
+      <div class="section-title">Shield & symbols</div>
+      <label for="shieldShape"><b>Shield shape</b></label>
+      <select id="shieldShape">
+        <option>medieval heater shield</option>
+        <option>gothic shield</option>
+        <option>round shield</option>
+      </select>
+
+      <label for="themeSelect" style="margin-top:8px;"><b>Which theme fits your family best?</b></label>
+      <select id="themeSelect" onchange="updateSymbolOptions()">
+        <option value="">(choose a theme)</option>
+        <option value="strength">Strength</option>
+        <option value="wisdom">Wisdom</option>
+        <option value="nature">Nature</option>
+        <option value="creativity">Creativity</option>
+        <option value="faith">Faith</option>
+        <option value="adventure">Adventure</option>
+        <option value="legacy">Legacy</option>
+        <option value="protection">Protection</option>
+      </select>
+
+      <div class="small-row" style="margin-top:8px;">
+        <div>
+          <label for="topLeft"><b>Top left symbol</b></label>
+          <select id="topLeft"></select>
+        </div>
+        <div>
+          <label for="topRight"><b>Top right symbol</b></label>
+          <select id="topRight"></select>
+        </div>
+      </div>
+      <div class="small-row">
+        <div>
+          <label for="bottomLeft"><b>Bottom left symbol</b></label>
+          <select id="bottomLeft"></select>
+        </div>
+        <div>
+          <label for="bottomRight"><b>Bottom right symbol</b></label>
+          <select id="bottomRight"></select>
+        </div>
+      </div>
+      <div class="hint">We’ll pre-fill these based on your chosen theme, but you can change them.</div>
+
+      <div class="section-title">Supporters & base</div>
+      <label for="supporters"><b>Supporters (figures on each side)</b></label>
+      <input id="supporters" placeholder="e.g., two lions, two panthers, stag and unicorn">
+      <div class="hint">If left blank, we’ll choose supporters that match your family theme.</div>
+
+      <label for="compartment" style="margin-top:6px;"><b>Compartment / base</b></label>
+      <input id="compartment" placeholder="e.g., stone base, scroll, grassy hill, clouds">
+
+      <div class="section-title">Motto</div>
+      <label for="mottoInput"><b>Write your motto in your own words</b></label>
+      <input id="mottoInput" placeholder="e.g., you can do what you set your mind to">
+
+      <label for="mottoLanguage" style="margin-top:6px;"><b>Motto language</b></label>
+      <select id="mottoLanguage">
+        <option value="english">English (old-world style)</option>
+        <option value="latin">Latin</option>
+        <option value="french">French (heraldic)</option>
+        <option value="italian">Italian</option>
+        <option value="german">German</option>
+        <option value="spanish">Spanish</option>
+        <option value="gaelic">Gaelic</option>
+        <option value="old_norse">Old Norse</option>
+        <option value="elvish">Elvish-style (fantasy)</option>
+      </select>
+
+      <label for="mottoStyle" style="margin-top:6px;"><b>Translation style</b></label>
+      <select id="mottoStyle">
+        <option value="accurate">Historically accurate</option>
+        <option value="stylized">Stylized / fantasy</option>
+      </select>
+
+      <button type="button" onclick="craftMotto()">craft motto</button>
+      <div id="mottoResult" class="subtext"></div>
+    </div>
+
+    <!-- RIGHT: PREVIEW + GENERATION -->
+    <div id="right">
+      <div class="section-title">Crest details</div>
+      <div class="subtext">
+        The crest will always feature a <b>tall, ornate medieval royal crown</b> above the shield, with
+        <b>grand, flowing, ornate medieval mantling</b> in rich heraldic style.
+      </div>
+
+      <div class="section-title">Generate crest</div>
+      <button type="button" onclick="generateCrest()">generate family crest</button>
+      <button type="button" class="secondary" onclick="tryAgain()" id="tryAgainBtn" disabled>try again</button>
+      <button type="button" class="secondary" onclick="startOver()">start over</button>
+
+      <div id="status"></div>
+      <div id="result"></div>
+
+      <div class="section-title">Notes</div>
+      <div class="subtext">
+        Your crest will be rendered with a transparent background, rich engraved metal, realistic lighting, and
+        the word <b>kinlink</b> subtly integrated in a style similar to the Comfortaa font.
+      </div>
+    </div>
   </div>
-
-  <div class="field-group">
-    <label for="shieldShape">Shield Shape</label>
-    <input id="shieldShape" placeholder="e.g., medieval heater shield, gothic shield, round shield">
-    <div class="hint">Overall shape of the shield.</div>
-  </div>
-
-  <div class="field-group">
-    <label>Shield Quarters (Symbols / Charges)</label>
-
-    <input id="topLeft" placeholder="Top left symbol">
-    <div class="hint">Examples: lion, tree, star, book, torch.</div>
-
-    <input id="topRight" placeholder="Top right symbol">
-    <div class="hint">Examples: eagle, DNA, sword, flower, mountain.</div>
-
-    <input id="bottomLeft" placeholder="Bottom left symbol">
-    <div class="hint">Examples: open book, waves, fire, quill, gear.</div>
-
-    <input id="bottomRight" placeholder="Bottom right symbol">
-    <div class="hint">Examples: phoenix, tulip, compass, heart, planet.</div>
-  </div>
-
-  <div class="field-group">
-    <label for="supporters">Supporters (left and right)</label>
-    <input id="supporters" placeholder="e.g., two lions, two dragons, stag and unicorn">
-    <div class="hint">Figures standing on each side of the shield (optional but traditional).</div>
-  </div>
-
-  <div class="field-group">
-    <label for="mantling">Mantling Style</label>
-    <input id="mantling" placeholder="e.g., flowing cloth in gold and red, leafy vines">
-    <div class="hint">Decorative cloth or shapes flowing from the helmet or crest.</div>
-  </div>
-
-  <div class="field-group">
-    <label for="compartment">Compartment / Base</label>
-    <input id="compartment" placeholder="e.g., stone base, scroll, grassy hill, clouds">
-    <div class="hint">The base that supporters stand on.</div>
-  </div>
-
-  <div class="field-group">
-    <label for="colors">Color Theme / Tinctures</label>
-    <input id="colors" placeholder="e.g., gold and black, silver and blue, red and gold">
-    <div class="hint">Overall color palette for the crest.</div>
-  </div>
-
-  <div class="field-group">
-    <label for="motto">Motto</label>
-    <input id="motto" placeholder="e.g., Strength in Unity, Knowledge is Power">
-    <div class="hint">Phrase that expresses the family’s guiding principle.</div>
-  </div>
-
-  <button onclick="generateCrest()">generate family crest</button>
-
-  <div id="status"></div>
-  <div id="result"></div>
 </div>
 
 <script>
-async function generateCrest() {
-  const familyName = document.getElementById("familyName").value;
-  const crestType = document.getElementById("crestType").value;
-  const shieldShape = document.getElementById("shieldShape").value;
-  const tl = document.getElementById("topLeft").value;
-  const tr = document.getElementById("topRight").value;
-  const bl = document.getElementById("bottomLeft").value;
-  const br = document.getElementById("bottomRight").value;
-  const supporters = document.getElementById("supporters").value;
-  const mantling = document.getElementById("mantling").value;
-  const compartment = document.getElementById("compartment").value;
-  const colors = document.getElementById("colors").value;
-  const motto = document.getElementById("motto").value;
+  const OPENAI_API_KEY = "YOUR_API_KEY_HERE"; // <-- replace with your key
 
-  const prompt = `
+  const palettePresets = [
+    { name: "Royal Gold & Black", value: "gold and black", colors: ["gold", "black"], swatch: ["#f4c542", "#111111"] },
+    { name: "Crimson & Gold", value: "red and gold", colors: ["red", "gold"], swatch: ["#b30024", "#f4c542"] },
+    { name: "Sapphire & Silver", value: "blue and silver", colors: ["blue", "silver"], swatch: ["#1f4ba8", "#d0d7e5"] },
+    { name: "Emerald & Silver", value: "green and silver", colors: ["green", "silver"], swatch: ["#0f7a3b", "#d0d7e5"] },
+    { name: "Purple & Gold", value: "purple and gold", colors: ["purple", "gold"], swatch: ["#4b0082", "#f4c542"] },
+    { name: "Midnight Blue & Silver", value: "midnight blue and silver", colors: ["blue", "black", "silver"], swatch: ["#020b2b", "#d0d7e5"] }
+  ];
+
+  const themeSymbols = {
+    strength: ["lion", "sword", "flaming torch", "eagle", "shield"],
+    wisdom: ["owl", "open book", "quill", "star", "lamp"],
+    nature: ["tree", "mountain", "river", "leaf", "stag"],
+    creativity: ["quill", "star", "flame", "book", "lyre"],
+    faith: ["cross", "sunburst", "dove", "chalice", "star"],
+    adventure: ["compass", "ship", "mountain", "banner", "path"],
+    legacy: ["laurel wreath", "torch", "oak tree", "crown", "scroll"],
+    protection: ["shield", "tower", "dragon", "bear", "gauntlet"]
+  };
+
+  function suggestPalettes() {
+    const input = document.getElementById("colorWords").value.toLowerCase();
+    const select = document.getElementById("paletteSelect");
+    const pills = document.getElementById("palettePills");
+    select.innerHTML = '<option value="">(choose a palette)</option>';
+    pills.innerHTML = "";
+
+    if (!input.trim()) return;
+
+    const matches = palettePresets.filter(p =>
+      p.colors.some(c => input.includes(c))
+    );
+
+    const list = matches.length ? matches : palettePresets;
+
+    list.forEach(p => {
+      const opt = document.createElement("option");
+      opt.value = p.value;
+      opt.textContent = p.name;
+      select.appendChild(opt);
+
+      const pill = document.createElement("div");
+      pill.className = "pill";
+      pill.onclick = () => { select.value = p.value; };
+      p.swatch.forEach(color => {
+        const s = document.createElement("span");
+        s.className = "swatch";
+        s.style.background = color;
+        pill.appendChild(s);
+      });
+      pill.appendChild(document.createTextNode(" " + p.name));
+      pills.appendChild(pill);
+    });
+  }
+
+  function fillSymbolSelect(id, symbols) {
+    const sel = document.getElementById(id);
+    sel.innerHTML = "";
+    symbols.forEach(s => {
+      const opt = document.createElement("option");
+      opt.value = s;
+      opt.textContent = s;
+      sel.appendChild(opt);
+    });
+  }
+
+  function updateSymbolOptions() {
+    const theme = document.getElementById("themeSelect").value || "strength";
+    const symbols = themeSymbols[theme] || themeSymbols["strength"];
+    fillSymbolSelect("topLeft", symbols);
+    fillSymbolSelect("topRight", symbols);
+    fillSymbolSelect("bottomLeft", symbols);
+    fillSymbolSelect("bottomRight", symbols);
+  }
+
+  // Initialize symbol dropdowns
+  updateSymbolOptions();
+
+  async function craftMotto() {
+    const raw = document.getElementById("mottoInput").value.trim();
+    const lang = document.getElementById("mottoLanguage").value;
+    const style = document.getElementById("mottoStyle").value;
+    const out = document.getElementById("mottoResult");
+
+    if (!raw) {
+      out.textContent = "Type a simple phrase first, and we’ll rewrite it in an old-world style.";
+      return;
+    }
+
+    out.textContent = "Crafting an old-world motto…";
+
+    const styleLabel = style === "accurate" ? "historically accurate" : "stylized, fantasy-inspired";
+    const langLabel = {
+      english: "Old-world English",
+      latin: "Latin",
+      french: "heraldic French",
+      italian: "Italian",
+      german: "German",
+      spanish: "Spanish",
+      gaelic: "Gaelic",
+      old_norse: "Old Norse",
+      elvish: "Elvish-style fantasy language"
+    }[lang] || "Old-world English";
+
+    const prompt = `
+Rewrite the following modern motto into an old-world, medieval-style motto.
+Then translate it into ${langLabel}, in a ${styleLabel} way.
+Return ONLY the final motto text, no explanations.
+
+Modern motto: "${raw}"
+`;
+
+    try {
+      const resp = await fetch("https://api.openai.com/v1/chat/completions", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          "Authorization": "Bearer " + OPENAI_API_KEY
+        },
+        body: JSON.stringify({
+          model: "gpt-4.1-mini",
+          messages: [
+            { role: "system", content: "You are an expert in medieval heraldry, language, and motto crafting." },
+            { role: "user", content: prompt }
+          ],
+          temperature: 0.8
+        })
+      });
+
+      const data = await resp.json();
+      const motto = data.choices?.[0]?.message?.content?.trim();
+      if (!motto) {
+        out.textContent = "Could not craft a motto right now. Try again.";
+        return;
+      }
+
+      out.innerHTML = `<b>Proposed motto:</b> “${motto}”<br><span style="font-size:11px;">If you don’t like it, change your phrase or click craft again.</span>`;
+    } catch (e) {
+      out.textContent = "Error contacting the motto service. Try again.";
+    }
+  }
+
+  let lastPrompt = "";
+
+  async function generateCrest() {
+    const familyName = document.getElementById("familyName").value;
+    const identityWords = document.getElementById("identityWords").value;
+    const themes = document.getElementById("themes").value;
+    const palette = document.getElementById("paletteSelect").value;
+    const shieldShape = document.getElementById("shieldShape").value;
+    const tl = document.getElementById("topLeft").value;
+    const tr = document.getElementById("topRight").value;
+    const bl = document.getElementById("bottomLeft").value;
+    const br = document.getElementById("bottomRight").value;
+    const supporters = document.getElementById("supporters").value;
+    const compartment = document.getElementById("compartment").value;
+    const mottoText = document.getElementById("mottoResult").textContent.includes("Proposed motto:")
+      ? document.getElementById("mottoResult").innerText.replace(/^Proposed motto:\s*“?/, "").replace(/”?\s*If you don.*/s, "").trim()
+      : document.getElementById("mottoInput").value.trim();
+
+    const colors = palette || document.getElementById("colorWords").value;
+
+    const prompt = `
 Create a high-quality, realistic, historically inspired family coat of arms (full heraldic achievement) with:
 
-- Family / house name: ${familyName}
-- Overall style: detailed, engraved, metallic, royal, with ${colors} as the main tinctures
+- Family / house name: ${familyName || "leave name area blank if not provided"}
+- Overall style: detailed, engraved, metallic, royal, with ${colors || "rich heraldic colors"} as the main tinctures
+- Background: transparent
 - Shield shape: ${shieldShape}
 - Shield divided into four quarters:
   - Top left: ${tl}
   - Top right: ${tr}
   - Bottom left: ${bl}
   - Bottom right: ${br}
-- Crest above the shield: ${crestType}
-- Supporters on each side of the shield: ${supporters}
-- Mantling style: ${mantling}
-- Compartment / base beneath the shield and supporters: ${compartment}
-- Motto on a scroll beneath the shield: "${motto}"
+- Crest above the shield: a tall, ornate medieval royal crown
+- Mantling: grand, ornate, flowing medieval mantling in rich heraldic style, matching the main colors
+- Supporters on each side of the shield: ${supporters || "figures that match the family's values: " + identityWords}
+- Compartment / base beneath the shield and supporters: ${compartment || "a simple but noble base that fits the design"}
+- Motto on a scroll beneath the shield: "${mottoText || "leave the motto scroll blank if none is provided"}"
+- The design should reflect these family values and themes: ${identityWords}; ${themes}
 - Include the word "kinlink" in lowercase, in a style similar to the Comfortaa font, subtly integrated into the design
 - Transparent background
-- Rich engraved gold and silver detailing, realistic lighting and shadows, high resolution, looks like a real physical crest.
+- Rich engraved gold and silver detailing, realistic lighting and shadows, high resolution, looks like a real physical crest photographed in dramatic light.
 
-The final image should look like a traditional European family coat of arms, photographed or rendered in high detail, suitable for use as a family crest.
+The final image should look like a traditional European family coat of arms, rendered in high detail, suitable for use as a family crest.
 `;
 
-  const statusEl = document.getElementById("status");
-  const resultEl = document.getElementById("result");
-  statusEl.textContent = "Generating your family crest…";
-  resultEl.innerHTML = "";
+    lastPrompt = prompt;
 
-  try {
-    const response = await fetch("https://api.openai.com/v1/images/generations", {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-        "Authorization": "Bearer YOUR_API_KEY_HERE"
-      },
-      body: JSON.stringify({
-        model: "gpt-image-1",
-        prompt: prompt,
-        size: "1024x1024"
-      })
-    });
+    const statusEl = document.getElementById("status");
+    const resultEl = document.getElementById("result");
+    const tryAgainBtn = document.getElementById("tryAgainBtn");
 
-    const data = await response.json();
+    statusEl.textContent = "Summoning your family crest…";
+    resultEl.innerHTML = "";
+    tryAgainBtn.disabled = true;
 
-    if (!data.data || !data.data[0] || !data.data[0].url) {
-      statusEl.textContent = "Something went wrong generating the crest.";
-      return;
+    try {
+      const response = await fetch("https://api.openai.com/v1/images/generations", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          "Authorization": "Bearer " + OPENAI_API_KEY
+        },
+        body: JSON.stringify({
+          model: "gpt-image-1",
+          prompt: prompt,
+          size: "1024x1024"
+        })
+      });
+
+      const data = await response.json();
+
+      if (!data.data || !data.data[0] || !data.data[0].url) {
+        statusEl.textContent = "Something went wrong generating the crest.";
+        return;
+      }
+
+      const url = data.data[0].url;
+
+      statusEl.textContent = "Your family crest is ready:";
+      resultEl.innerHTML =
+        `<img src="${url}" alt="family crest"><br>
+         <a href="${url}" download="family-crest.png" style="font-size:12px;color:#d7cfff;">download crest</a>`;
+      tryAgainBtn.disabled = false;
+    } catch (e) {
+      statusEl.textContent = "Error contacting the image service.";
     }
-
-    const url = data.data[0].url;
-
-    statusEl.textContent = "Your family crest is ready:";
-    resultEl.innerHTML =
-      `<img src="${url}" alt="family crest"><br>
-       <a href="${url}" download="family-crest.png">download crest</a>`;
-  } catch (e) {
-    statusEl.textContent = "Error contacting the image service.";
   }
-}
-</script>
 
+  async function tryAgain() {
+    if (!lastPrompt) return;
+    const statusEl = document.getElementById("status");
+    const resultEl = document.getElementById("result");
+
+    statusEl.textContent = "Trying another variation of your crest…";
+    resultEl.innerHTML = "";
+
+    try {
+      const response = await fetch("https://api.openai.com/v1/images/generations", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          "Authorization": "Bearer " + OPENAI_API_KEY
+        },
+        body: JSON.stringify({
+          model: "gpt-image-1",
+          prompt: lastPrompt + "\nCreate a different variation of this crest while keeping the same core elements.",
+          size: "1024x1024"
+        })
+      });
+
+      const data = await response.json();
+
+      if (!data.data || !data.data[0] || !data.data[0].url) {
+        statusEl.textContent = "Something went wrong generating another crest.";
+        return;
+      }
+
+      const url = data.data[0].url;
+
+      statusEl.textContent = "Here is another version of your crest:";
+      resultEl.innerHTML =
+        `<img src="${url}" alt="family crest variation"><br>
+         <a href="${url}" download="family-crest-variation.png" style="font-size:12px;color:#d7cfff;">download crest</a>`;
+    } catch (e) {
+      statusEl.textContent = "Error contacting the image service.";
+    }
+  }
+
+  function startOver() {
+    document.getElementById("familyName").value = "";
+    document.getElementById("identityWords").value = "";
+    document.getElementById("themes").value = "";
+    document.getElementById("colorWords").value = "";
+    document.getElementById("paletteSelect").innerHTML = '<option value="">(choose a palette)</option>';
+    document.getElementById("palettePills").innerHTML = "";
+    document.getElementById("shieldShape").value = "medieval heater shield";
+    document.getElementById("themeSelect").value = "";
+    updateSymbolOptions();
+    document.getElementById("supporters").value = "";
+    document.getElementById("compartment").value = "";
+    document.getElementById("mottoInput").value = "";
+    document.getElementById("mottoLanguage").value = "english";
+    document.getElementById("mottoStyle").value = "accurate";
+    document.getElementById("mottoResult").textContent = "";
+    document.getElementById("status").textContent = "";
+    document.getElementById("result").innerHTML = "";
+    document.getElementById("tryAgainBtn").disabled = true;
+    lastPrompt = "";
+  }
+</script>
 </body>
 </html>
