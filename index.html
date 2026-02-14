@@ -70,17 +70,30 @@
     const canvas = document.getElementById('crestCanvas');
     const ctx = canvas.getContext('2d');
 
+    function drawMetalGradient(x0, y0, x1, y1) {
+      const grad = ctx.createLinearGradient(x0, y0, x1, y1);
+      grad.addColorStop(0, '#f5deb3'); // light gold
+      grad.addColorStop(0.5, '#d4af37'); // gold
+      grad.addColorStop(1, '#b8860b'); // dark gold
+      return grad;
+    }
+
+    function drawSymbol(text, x, y) {
+      ctx.font = '28px Comfortaa';
+      ctx.fillStyle = drawMetalGradient(x - 50, y - 50, x + 50, y + 50);
+      ctx.shadowColor = '#b8860b';
+      ctx.shadowBlur = 8;
+      ctx.textAlign = 'center';
+      ctx.fillText(text, x, y);
+      ctx.shadowBlur = 0;
+    }
+
     function drawCrest() {
       ctx.clearRect(0, 0, canvas.width, canvas.height);
 
-      // Metallic gradient
-      const gradient = ctx.createLinearGradient(0, 0, canvas.width, canvas.height);
-      gradient.addColorStop(0, '#d4af37');
-      gradient.addColorStop(1, '#b8860b');
-      ctx.strokeStyle = '#d4af37';
-      ctx.lineWidth = 8;
-
-      // Shield
+      // Shield outline
+      ctx.strokeStyle = drawMetalGradient(300, 200, 500, 600);
+      ctx.lineWidth = 10;
       ctx.beginPath();
       ctx.moveTo(300, 200);
       ctx.lineTo(500, 200);
@@ -98,24 +111,24 @@
       ctx.stroke();
 
       // Symbols
-      ctx.font = '28px Comfortaa';
-      ctx.fillStyle = '#d4af37';
-      ctx.textAlign = 'center';
-      ctx.fillText(document.getElementById('topLeft').value, 350, 300);
-      ctx.fillText(document.getElementById('topRight').value, 450, 300);
-      ctx.fillText(document.getElementById('bottomLeft').value, 350, 500);
-      ctx.fillText(document.getElementById('bottomRight').value, 450, 500);
+      drawSymbol(document.getElementById('topLeft').value, 350, 300);
+      drawSymbol(document.getElementById('topRight').value, 450, 300);
+      drawSymbol(document.getElementById('bottomLeft').value, 350, 500);
+      drawSymbol(document.getElementById('bottomRight').value, 450, 500);
 
       // Crown
-      ctx.font = '40px Comfortaa';
+      ctx.font = '48px Comfortaa';
+      ctx.fillStyle = drawMetalGradient(380, 150, 420, 180);
       ctx.fillText('👑', 400, 180);
 
       // Motto
       ctx.font = '24px Comfortaa';
+      ctx.fillStyle = drawMetalGradient(300, 650, 500, 670);
       ctx.fillText(document.getElementById('motto').value, 400, 650);
 
       // kinlink
       ctx.font = '36px Comfortaa';
+      ctx.fillStyle = drawMetalGradient(300, 700, 500, 720);
       ctx.fillText('kinlink', 400, 700);
     }
 
